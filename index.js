@@ -55,9 +55,11 @@ app.get('/', async (req, res) => {
                         <tr><th>Nombre</th><th>Teléfono</th><th>Estado</th></tr>`;
         
         clientes.forEach(c => {
-            html += `<tr><td>${c.nombre}</td><td>${c.telefono}</td><td>${c.estado}</td></tr>`;
-        });
-
+           html += `<tr>
+    <td>${c.nombre}</td>
+    <td><a href="https://wa.me/58${c.telefono}?text=Hola%20${c.nombre},%20te%20escribimos%20de%20tu%20sistema%20para%20confirmar%20tu%20estatus%20actual:%20${c.estado}" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 ${c.telefono}</a></td>
+    <td>${c.estado}</td>
+</tr>`;
         html += `</table></div></body></html>`;
         res.send(html);
     } catch (err) {
