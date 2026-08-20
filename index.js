@@ -55,9 +55,9 @@ app.get('/', async (req, res) => {
                         <tr><th>Nombre</th><th>Teléfono</th><th>Estado</th></tr>`;
         
         clientes.forEach(c => {
-  html += `<tr><td>${c.nombre}</td><td><a href="https://wa.me/58${c.telefono}?text=Hola%20${c.nombre}" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 ${c.telefono}</a></td><td>${c.estado}</td></tr>`;
-        html += `</table></div></body></html>`;
-        res.send(html);
+    let telefonoFormateado = `https://wa.me/58${c.telefono}?text=Hola%20${c.nombre}`;
+    html += `<tr><td>${c.nombre}</td><td><a href="${telefonoFormateado}" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 ${c.telefono}</a></td><td>${c.estado}</td></tr>`;
+});
     } catch (err) {
         res.status(500).send("Error al cargar los datos: " + err.message);
     }
