@@ -16,48 +16,51 @@ app.get('/', async (req, res) => {
     try {
         const { data: clientes, error } = await supabase.from('cliente').select('*');
         if (error) throw error;
-
-        let html = `
-            <!DOCTYPE html>
-            <html lang="es">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Gestor de Clientes - Automatizador</title>
-                <style>
-                    body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; color: #333; }
-                    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-                    h2 { color: #2c3e50; }
-                    form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-                    input, select, button { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
-                    button { background: #27ae60; color: white; border: none; cursor: pointer; }
-                    button:hover { background: #219653; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
-                    th { background: #f8f9fa; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h2>Panel de Control - Negocio</h2>
-                    <form action="/agregar" method="POST">
-                        <input type="text" name="nombre" placeholder="Nombre del cliente" required>
-                        <input type="text" name="telefono" placeholder="Teléfono / WhatsApp" required>
-                        <select name="estado">
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="Contactado">Contactado</option>
-                            <option value="Pagado">Pagado</option>
-                        </select>
-                        <button type="submit">Guardar Cliente</button>
-                    </form>
-                    <h3>Lista de Clientes Registrados</h3>
-                    <table>
-                        <tr><th>Nombre</th><th>Teléfono</th><th>Estado</th></tr>`;
         
+        let html = `<!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Gestor de Clientes - Automatizador</title>
+            <style>
+                body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
+                .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                h2 { color: #2c3e50; }
+                form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+                input, select, button { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
+                button { background: #27ae60; color: white; border: none; cursor: pointer; }
+                button:hover { background: #219653; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+                th { background: #f8f9fa; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>Panel de Control - Negocio</h2>
+                <form action="/agregar" method="POST">
+                    <input type="text" name="nombre" placeholder="Nombre del cliente" required>
+                    <input type="text" name="telefono" placeholder="Teléfono / WhatsApp" required>
+                    <select name="estado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Contactado">Contactado</option>
+                        <option value="Pagado">Pagado</option>
+                    </select>
+                    <button type="submit">Guardar Cliente</button>
+                </form>
+                <h3>Lista de Clientes Registrados</h3>
+                <table>
+                    <tr><th>Nombre</th><th>Teléfono</th><th>Estado</th></tr>`;
+
         clientes.forEach(c => {
-    let telefonoFormateado = `https://wa.me/58${c.telefono}?text=Hola%20${c.nombre}`;
-    html += `<tr><td>${c.nombre}</td><td><a href="${telefonoFormateado}" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 ${c.telefono}</a></td><td>${c.estado}</td></tr>`;
-});
+            let telefonoFormateado = `https://wa.me/58${c.telefono}?text=Hola%20${c.nombre}`;
+            html += `<tr><td>${c.nombre}</td><td><a href="${telefonoFormateado}" target="_blank" style="color: #25d366; text-decoration: none; font-weight: bold;">💬 ${c.telefono}</a></td><td>${c.estado}</td></tr>`;
+        });
+
+        html += `</table></div></body></html>`;
+        res.send(html);
+
     } catch (err) {
         res.status(500).send("Error al cargar los datos: " + err.message);
     }
